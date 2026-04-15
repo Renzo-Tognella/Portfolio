@@ -1,0 +1,169 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #f5f5f7;
+  --surface: #111111;
+  --card: #1d1d1f;
+  --card-hover: #2a2a2d;
+  --muted: #86868b;
+  --muted-dim: #6e6e73;
+  --ruby: #dc2626;
+  --ruby-glow: rgba(220, 38, 38, 0.15);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  --apple-blue: #2997ff;
+  --glass-bg: rgba(0, 0, 0, 0.72);
+  --glass-blur: saturate(180%) blur(20px);
+  --shadow-card: 0 0 0 1px rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-card-hover: 0 0 0 1px rgba(255,255,255,0.08), 0 8px 40px rgba(0,0,0,0.5);
+  --shadow-elevated: 0 0 0 1px rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.6);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-muted: var(--muted);
+  --color-muted-dim: var(--muted-dim);
+  --color-ruby: var(--ruby);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  font-feature-settings: "liga" 1, "tnum" 1;
+}
+
+::selection { background-color: rgba(220, 38, 38, 0.25); color: #f5f5f7; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
+
+/* Apple-style section rhythm - alternating depth */
+.section-dark { background: #000000; }
+.section-surface { background: #0a0a0a; }
+.section-elevated { background: #111111; }
+
+/* Typography scale - Apple inspired */
+.text-display { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 600; line-height: 1.07; letter-spacing: -0.03em; }
+.text-headline { font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; line-height: 1.10; letter-spacing: -0.02em; }
+.text-title { font-size: clamp(1.25rem, 2vw, 1.75rem); font-weight: 600; line-height: 1.14; letter-spacing: 0.02em; }
+.text-body-lg { font-size: 1.125rem; font-weight: 400; line-height: 1.47; letter-spacing: -0.01em; color: var(--muted); }
+.text-body { font-size: 1rem; font-weight: 400; line-height: 1.47; letter-spacing: -0.01em; color: var(--muted); }
+.text-caption { font-size: 0.875rem; font-weight: 400; line-height: 1.29; letter-spacing: -0.01em; color: var(--muted-dim); }
+.text-micro { font-size: 0.75rem; font-weight: 500; line-height: 1.33; letter-spacing: -0.01em; text-transform: uppercase; }
+
+/* Apple pill CTAs */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #f5f5f7; color: #1d1d1f;
+  padding: 12px 28px; border-radius: 980px;
+  font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.01em;
+  border: none; cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.btn-primary:hover { background: #dc2626; color: #fff; transform: scale(1.02); }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: #2997ff;
+  padding: 12px 28px; border-radius: 980px;
+  font-size: 0.9375rem; font-weight: 400; letter-spacing: -0.01em;
+  border: 1px solid rgba(41, 151, 255, 0.3); cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.btn-secondary:hover { border-color: #2997ff; background: rgba(41, 151, 255, 0.08); }
+
+/* Glass morphism - Apple nav */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* Cards - Apple style */
+.card {
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+/* Unboxing reveal animations */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(60px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes reveal-scale {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes reveal-clip {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes line-draw {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  30% { transform: translate(3%, -15%); }
+  50% { transform: translate(12%, 9%); }
+  70% { transform: translate(9%, 4%); }
+  90% { transform: translate(-1%, 7%); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.grain-overlay {
+  position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
+  pointer-events: none; z-index: 9999; opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  animation: grain 8s steps(10) infinite;
+}
+
+/* Section divider - Apple style */
+.section-divider {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .grain-overlay { display: none; }
+}
