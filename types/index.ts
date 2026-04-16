@@ -1,11 +1,36 @@
 export interface Project {
-  id: string; title: string; description: string; image: string; tags: string[];
-  category: "backend" | "frontend" | "ai-ml" | "mobile" | "academic";
-  github?: string; gitlab?: string; live?: string; featured: boolean; year: number; impact?: string;
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  category: "engineering" | "research" | "creative";
+  tags: string[];
+  year: string;
+  url?: string;
+  github?: string;
+  image?: string;
+  featured: boolean;
 }
-export interface Skill { name: string; icon: string; category: string; level: number; }
+
+export interface Skill {
+  category: string;
+  color: string;
+  items: { name: string; level: number }[];
+}
+
 export interface Experience {
-  id: string; role: string; company: string; description: string[]; period: string;
-  current: boolean; tags: string[]; badge: { text: string; color: string };
+  id: string;
+  role: string;
+  company: string;
+  companyUrl?: string;
+  period: string;
+  description: string;
+  highlights: string[];
+  type: "work" | "research" | "education";
 }
-export interface SocialLink { name: string; url: string; icon: string; }
+
+export interface SocialLink {
+  platform: string;
+  url: string;
+  icon: string;
+}
