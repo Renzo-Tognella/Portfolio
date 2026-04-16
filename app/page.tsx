@@ -1,39 +1,42 @@
 "use client";
+
 import { useState } from "react";
-import SmoothScroll from "@/components/ui/smooth-scroll";
-import LoadingScreen from "@/components/ui/loading-screen";
+import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/navbar";
-import Hero from "@/components/sections/hero";
-import About from "@/components/sections/about";
-import Projects from "@/components/sections/projects";
-import Freelance from "@/components/sections/freelance";
-import Skills from "@/components/sections/skills";
-import Experience from "@/components/sections/experience";
-import Contact from "@/components/sections/contact";
-import Footer from "@/components/layout/footer";
+import LoadingScreen from "@/components/ui/loading-screen";
+
+// Dynamic imports for code splitting
+const Hero = dynamic(() => import("@/components/sections/hero"));
+const About = dynamic(() => import("@/components/sections/about"));
+const Projects = dynamic(() => import("@/components/sections/projects"));
+const Freelance = dynamic(() => import("@/components/sections/freelance"));
+const Skills = dynamic(() => import("@/components/sections/skills"));
+const Experience = dynamic(() => import("@/components/sections/experience"));
+const Contact = dynamic(() => import("@/components/sections/contact"));
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
-    <SmoothScroll>
-      {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+    <>
+      {/* Grain overlay */}
+      <div className="grain-overlay" />
+
+      {isLoading && (
+        <LoadingScreen onComplete={() => setIsLoading(false)} />
+      )}
+
       <Navbar />
+
       <main>
         <Hero />
-        <div className="section-divider" />
         <About />
-        <div className="section-divider" />
         <Projects />
-        <div className="section-divider" />
         <Freelance />
-        <div className="section-divider" />
         <Skills />
-        <div className="section-divider" />
         <Experience />
-        <div className="section-divider" />
         <Contact />
       </main>
-      <Footer />
-    </SmoothScroll>
+    </>
   );
 }
