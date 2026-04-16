@@ -20,7 +20,6 @@ export default function Hero() {
           setDisplayText(currentRole.slice(0, displayText.length + 1));
         }, 60);
       } else {
-        // Pause before deleting
         timeout = setTimeout(() => setIsDeleting(true), 2000);
       }
     } else {
@@ -44,7 +43,7 @@ export default function Hero() {
       const section = sectionRef.current;
       if (!section) return;
 
-      const tl = gsap.timeline({ delay: 3.8 }); // After loading screen
+      const tl = gsap.timeline({ delay: 3.8 });
 
       tl.fromTo(
         section.querySelector(".hero-greeting"),
@@ -145,10 +144,7 @@ export default function Hero() {
 
         {/* CTAs */}
         <div className="hero-cta mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <a
-            href={heroData.cta.primary.href}
-            className="magnetic-btn"
-          >
+          <a href={heroData.cta.primary.href} className="magnetic-btn">
             {heroData.cta.primary.label}
           </a>
           <a
@@ -176,20 +172,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes scrollDown {
-          0% {
-            transform: translateY(-100%);
-          }
-          50% {
-            transform: translateY(0%);
-          }
-          100% {
-            transform: translateY(100%);
-          }
-        }
-      `}</style>
     </section>
   );
 }
