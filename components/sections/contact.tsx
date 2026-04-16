@@ -1,96 +1,177 @@
 "use client";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Mail, MapPin, ArrowRight } from "lucide-react";
-import { GithubIcon, LinkedinIcon, GitlabIcon } from "@/components/ui/social-icons";
-import { socialLinks, aboutMe } from "@/lib/data";
-gsap.registerPlugin(ScrollTrigger);
+
+import { useRef, useEffect, useState } from "react";
+import { contactData, socialLinks } from "@/lib/data";
+import { Send, ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
+
+const iconMap: Record<string, React.ReactNode> = {
+  github: <Github size={18} />,
+  linkedin: <Linkedin size={18} />,
+  mail: <Mail size={18} />,
+};
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   useEffect(() => {
-    if (!sectionRef.current) return;
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: sectionRef.current, start: "top 75%", toggleActions: "play none none none" },
-      });
-      tl.fromTo(".ct-form", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" });
-      tl.fromTo(".ct-info", { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, "-=0.5");
-      tl.fromTo(".ct-link", { x: 20, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.08, duration: 0.4 }, "-=0.3");
-    }, sectionRef);
-    return () => ctx.revert();
+    const initGSAP = async () => {
+      const gsap = (await import("gsap")).default;
+      const ScrollTrigger = (await import("gsap/ScrollTrigger")).default;
+      gsap.registerPlugin(ScrollTrigger);
+
+      const section = sectionRef.current;
+      if (!section) return;
+
+      gsap.fromTo(
+        ".contact-heading",
+        { y: 60, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 70%",
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".contact-form",
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          delay: 0.3,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 60%",
+          },
+        }
+      );
+    };
+
+    initGSAP();
   }, []);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Form submission logic
+    const mailtoLink = `mailto:${contactData.email}?subject=Portfolio Contact from ${formState.name}&body=${formState.message}%0A%0AFrom: ${formState.name} (${formState.email})`;
+    window.open(mailtoLink);
+  };
+
   return (
-    <section id="contato" ref={sectionRef} className="py-32 md:py-40 px-6 section-dark">
-      <div className="max-w-[1200px] mx-auto">
-        <span className="text-micro tracking-[0.2em] text-[#6e6e73] mb-4 block">Contato</span>
-        <h2 className="text-headline text-[#f5f5f7]">Vamos conversar?</h2>
-        <p className="text-body-lg mt-3 mb-20 max-w-lg">Sempre aberto a novos projetos, oportunidades e ideias.</p>
+    <section
+      ref={sectionRef}
+      id="contact"
+      className="section-void relative px-6 py-[120px] md:py-[160px]"
+    >
+      <div className="mx-auto max-w-4xl">
+        <div className="section-label">Contact</div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-          {/* Form */}
-          <form className="ct-form" onSubmit={(e) => e.preventDefault()}>
-            <div className="mb-8">
-              <label className="text-micro tracking-[0.15em] text-[#6e6e73] mb-3 block">Nome</label>
-              <input type="text" placeholder="Seu nome"
-                className="w-full bg-transparent border-b border-white/[0.06] text-[#f5f5f7] text-base py-3 px-0 focus:border-[#f5f5f7]/30 focus:outline-none transition-colors duration-300 placeholder:text-[#6e6e73]/40" />
+        {/* Heading */}
+        <div className="contact-heading text-center">
+          <h2 className="text-4xl font-light tracking-tight text-white md:text-6xl lg:text-7xl">
+            {contactData.heading}
+          </h2>
+          <p className="mt-4 text-base text-[#666] md:text-lg">
+            {contactData.subheading}
+          </p>
+        </div>
+
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="contact-form mt-16 space-y-6"
+        >
+          <div className="grid gap-6 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block font-mono text-xs tracking-wider uppercase text-[#666]">
+                Name
+              </label>
+              <input
+                type="text"
+                value={formState.name}
+                onChange={(e) =>
+                  setFormState({ ...formState, name: e.target.value })
+                }
+                required
+                className="w-full border-b border-[#222] bg-transparent py-3 text-white outline-none transition-colors focus:border-[#dc2626]"
+                placeholder="Your name"
+              />
             </div>
-            <div className="mb-8">
-              <label className="text-micro tracking-[0.15em] text-[#6e6e73] mb-3 block">Email</label>
-              <input type="email" placeholder="seu@email.com"
-                className="w-full bg-transparent border-b border-white/[0.06] text-[#f5f5f7] text-base py-3 px-0 focus:border-[#f5f5f7]/30 focus:outline-none transition-colors duration-300 placeholder:text-[#6e6e73]/40" />
+            <div>
+              <label className="mb-2 block font-mono text-xs tracking-wider uppercase text-[#666]">
+                Email
+              </label>
+              <input
+                type="email"
+                value={formState.email}
+                onChange={(e) =>
+                  setFormState({ ...formState, email: e.target.value })
+                }
+                required
+                className="w-full border-b border-[#222] bg-transparent py-3 text-white outline-none transition-colors focus:border-[#dc2626]"
+                placeholder="your@email.com"
+              />
             </div>
-            <div className="mb-8">
-              <label className="text-micro tracking-[0.15em] text-[#6e6e73] mb-3 block">Mensagem</label>
-              <textarea placeholder="Sua mensagem..."
-                className="w-full bg-transparent border-b border-white/[0.06] text-[#f5f5f7] text-base py-3 px-0 focus:border-[#f5f5f7]/30 focus:outline-none transition-colors duration-300 h-32 resize-none placeholder:text-[#6e6e73]/40" />
-            </div>
-            <button type="submit" className="btn-primary mt-6 group">
-              Enviar mensagem
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+          </div>
+
+          <div>
+            <label className="mb-2 block font-mono text-xs tracking-wider uppercase text-[#666]">
+              Message
+            </label>
+            <textarea
+              value={formState.message}
+              onChange={(e) =>
+                setFormState({ ...formState, message: e.target.value })
+              }
+              required
+              rows={5}
+              className="w-full resize-none border-b border-[#222] bg-transparent py-3 text-white outline-none transition-colors focus:border-[#dc2626]"
+              placeholder="Tell me about your project..."
+            />
+          </div>
+
+          <div className="flex flex-col items-center gap-8 pt-4 md:flex-row md:justify-between">
+            <button type="submit" className="magnetic-btn gap-2">
+              <Send size={14} />
+              {contactData.cta}
             </button>
-          </form>
-
-          {/* Info */}
-          <div className="ct-info">
-            <a href={`mailto:${aboutMe.email}`} className="flex items-center gap-4 mb-8 group">
-              <div className="w-10 h-10 rounded-xl bg-white/[0.04] flex items-center justify-center border border-white/[0.04] group-hover:border-[#dc2626]/30 transition-colors duration-300">
-                <Mail className="w-4 h-4 text-[#6e6e73] group-hover:text-[#dc2626] transition-colors duration-300" />
-              </div>
-              <span className="text-base text-[#f5f5f7] group-hover:text-[#dc2626] transition-colors duration-300">{aboutMe.email}</span>
-            </a>
-
-            <div className="flex items-center gap-4 mb-12">
-              <div className="w-10 h-10 rounded-xl bg-white/[0.04] flex items-center justify-center border border-white/[0.04]">
-                <MapPin className="w-4 h-4 text-[#6e6e73]" />
-              </div>
-              <span className="text-base text-[#6e6e73]">{aboutMe.location}</span>
-            </div>
 
             {/* Social links */}
-            <div className="space-y-4 mb-12">
+            <div className="flex items-center gap-6">
               {socialLinks.map((link) => (
-                <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer"
-                  className="ct-link flex items-center gap-4 text-[#6e6e73] hover:text-[#dc2626] hover:translate-x-2 transition-all duration-300 w-fit group">
-                  <div className="w-8 h-8 rounded-lg bg-white/[0.03] flex items-center justify-center border border-white/[0.04] group-hover:border-[#dc2626]/20 transition-colors duration-300">
-                    {link.icon === "github" && <GithubIcon size={14} />}
-                    {link.icon === "linkedin" && <LinkedinIcon size={14} />}
-                    {link.icon === "gitlab" && <GitlabIcon size={14} />}
-                  </div>
-                  <span className="text-sm">{link.name}</span>
+                <a
+                  key={link.platform}
+                  href={link.url}
+                  target={link.url.startsWith("mailto") ? undefined : "_blank"}
+                  rel="noopener noreferrer"
+                  className="text-[#444] transition-colors hover:text-white"
+                  aria-label={link.platform}
+                >
+                  {iconMap[link.icon]}
                 </a>
               ))}
             </div>
-
-            {/* Availability */}
-            <div className="inline-flex items-center gap-3 card px-5 py-3">
-              <span className="w-2 h-2 rounded-full bg-[#22c55e]" style={{ animation: "pulse-dot 2s ease-in-out infinite" }} />
-              <span className="text-micro text-[#6e6e73]">Disponivel para novos projetos</span>
-            </div>
           </div>
+        </form>
+
+        {/* Footer */}
+        <div className="mt-32 border-t border-[#1a1a1a] pt-8 text-center">
+          <p className="font-mono text-xs tracking-wider text-[#333]">
+            &copy; {new Date().getFullYear()} Renzo Tognella de Rosa. All rights
+            reserved.
+          </p>
         </div>
       </div>
     </section>
