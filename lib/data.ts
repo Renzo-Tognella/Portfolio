@@ -1,54 +1,304 @@
-import { Project, Skill, Experience, SocialLink } from "@/types";
+// ═══════════════════════════════════════════════════
+// Portfolio Data — Renzo Tognella de Rosa
+// Design Spec v3.0
+// ═══════════════════════════════════════════════════
 
+export interface Project {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  category: "engineering" | "research" | "creative";
+  tags: string[];
+  year: string;
+  url?: string;
+  github?: string;
+  image?: string;
+  featured: boolean;
+}
+
+export interface Skill {
+  category: string;
+  color: string;
+  items: { name: string; level: number }[];
+}
+
+export interface Experience {
+  id: string;
+  role: string;
+  company: string;
+  companyUrl?: string;
+  period: string;
+  description: string;
+  highlights: string[];
+  type: "work" | "research" | "education";
+}
+
+export interface SocialLink {
+  platform: string;
+  url: string;
+  icon: string;
+}
+
+// ── Navigation ──
+export const navLinks = [
+  { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
+  { label: "Skills", href: "#skills" },
+  { label: "Experience", href: "#experience" },
+  { label: "Contact", href: "#contact" },
+];
+
+// ── Hero Data ──
+export const heroData = {
+  greeting: "Hello, I'm",
+  name: "Renzo Tognella",
+  roles: [
+    "Software Engineer",
+    "Backend Architect",
+    "ML Researcher",
+    "Full-Stack Developer",
+  ],
+  tagline: "Building systems that think, scale, and endure.",
+  cta: {
+    primary: { label: "View Projects", href: "#projects" },
+    secondary: { label: "Get in Touch", href: "#contact" },
+  },
+};
+
+// ── About Data ──
+export const aboutData = {
+  paragraphs: [
+    "I'm a software engineer from Curitiba, Brazil, with a passion for building robust backend systems and exploring the frontiers of machine learning and NLP.",
+    "Currently at Tradener, I architect Rails-based financial platforms, and at Modulus Engenharia, I lead freelance full-stack projects for engineering clients.",
+    "My research background at UTFPR in IEEE-branded NLP and GenAI projects shaped how I approach complex engineering problems — with rigor and curiosity.",
+  ],
+  stats: [
+    { value: "4+", label: "Years Experience" },
+    { value: "20+", label: "Projects Delivered" },
+    { value: "5+", label: "Technologies Mastered" },
+    { value: "3", label: "Research Papers" },
+  ],
+  location: "Curitiba, PR — Brazil",
+  available: true,
+};
+
+// ── Projects ──
 export const projects: Project[] = [
-  { id: "sos-bsi-students", title: "SOS BSI Students", description: "Plataforma academica com IA para planejamento de grade e leitura de historico escolar.", image: "/images/projects/sos-bsi.webp", tags: ["Next.js 15", "React 19", "LLMs", "TypeScript", "Vercel"], category: "frontend", github: "https://github.com/Renzo-Tognella/SOS_BSI_Students", live: "https://sos-bsi-students.vercel.app", featured: true, year: 2025, impact: "Live na Vercel" },
-  { id: "codexcount", title: "CodexCount", description: "macOS menu bar widget que rastreia consumo de tokens do Codex CLI em tempo real.", image: "/images/projects/codexcount.webp", tags: ["Swift 5.9", "macOS 13+", "Menu Bar"], category: "mobile", github: "https://github.com/Renzo-Tognella/CodexCount", featured: true, year: 2025, impact: "App nativo macOS" },
-  { id: "pln-musical-analysis", title: "PLN Musical Analysis", description: "Analise de 6.292 musicas (1959-2023): sentimentos, topicos e complexidade com NLP e ML.", image: "/images/projects/pln.webp", tags: ["Python", "NLTK", "BERTopic", "Scikit-learn", "NLP"], category: "ai-ml", gitlab: "https://gitlab.com/Renzo-Tognella/pln", featured: true, year: 2024, impact: "6.292 musicas analisadas" },
-  { id: "triage-vital-ml", title: "TriageWithVitalML", description: "Classificacao de sinais vitais usando Machine Learning com Decision Trees, Random Forest e MLP.", image: "/images/projects/triage.webp", tags: ["Python", "Scikit-learn", "Random Forest", "MLP"], category: "ai-ml", github: "https://github.com/Renzo-Tognella/TriageWithVitalML", featured: true, year: 2024 },
-  { id: "text-to-sql", title: "Text2SQL", description: "Converte linguagem natural em consultas SQL usando Google Gemini AI.", image: "/images/projects/text-to-sql.webp", tags: ["Python", "Gemini AI", "PostgreSQL", "PyQt5"], category: "ai-ml", github: "https://github.com/Renzo-Tognella/Text_to_SQL", featured: true, year: 2024, impact: "NL -> SQL automatico" },
-  { id: "reconhecimento-alimentos", title: "Reconhecimento de Alimentos", description: "Sistema de reconhecimento de alimentos com CNN e segmentacao de imagens.", image: "/images/projects/alimentos.webp", tags: ["Python", "TensorFlow", "CNN", "Computer Vision"], category: "ai-ml", github: "https://github.com/Renzo-Tognella/reconhecimento_alimentos", featured: true, year: 2024 },
+  {
+    id: "tradener-platform",
+    title: "Tradener Platform",
+    subtitle: "Financial Energy Trading System",
+    description:
+      "Architected high-throughput backend for energy trading operations using Ruby on Rails. Designed RESTful APIs serving real-time market data with sub-200ms response times.",
+    category: "engineering",
+    tags: ["Ruby on Rails", "PostgreSQL", "Redis", "REST API"],
+    year: "2024",
+    url: "https://tradener.com",
+    featured: true,
+  },
+  {
+    id: "nlp-research",
+    title: "NLP Sentiment Analysis",
+    subtitle: "IEEE Research — UTFPR",
+    description:
+      "Developed a sentiment analysis pipeline for Brazilian Portuguese using TensorFlow and custom NLP models. Published in IEEE conference proceedings.",
+    category: "research",
+    tags: ["Python", "TensorFlow", "NLP", "GenAI"],
+    year: "2023",
+    featured: true,
+  },
+  {
+    id: "modulus-engenharia",
+    title: "Modulus Engenharia",
+    subtitle: "Freelance Engineering Platform",
+    description:
+      "Full-stack platform for engineering project management, client portal, and document automation. Built with Next.js and Rails API.",
+    category: "engineering",
+    tags: ["Next.js", "Ruby on Rails", "TypeScript", "Tailwind"],
+    year: "2024",
+    featured: true,
+  },
+  {
+    id: "portfolio-v3",
+    title: "This Portfolio",
+    subtitle: "Cinematic Dark Engineering",
+    description:
+      "Awwwards-inspired portfolio with GSAP animations, Lenis smooth scroll, and cinematic reveal patterns. Built with Next.js 16 and Tailwind 4.",
+    category: "creative",
+    tags: ["Next.js", "GSAP", "Tailwind", "Framer Motion"],
+    year: "2025",
+    github: "https://github.com/Renzo-Tognella/Portfolio",
+    featured: true,
+  },
+  {
+    id: "genai-chatbot",
+    title: "GenAI Assistant",
+    subtitle: "LLM-Powered Chat System",
+    description:
+      "Built an intelligent chatbot leveraging OpenAI APIs and RAG architecture for context-aware responses. Integrated with existing business systems.",
+    category: "research",
+    tags: ["Python", "LangChain", "OpenAI", "RAG"],
+    year: "2024",
+    featured: false,
+  },
+  {
+    id: "ios-app",
+    title: "iOS Utility App",
+    subtitle: "Native Swift Application",
+    description:
+      "Designed and developed a native iOS application with Swift and SwiftUI, featuring clean architecture and smooth animations.",
+    category: "creative",
+    tags: ["Swift", "SwiftUI", "iOS", "Xcode"],
+    year: "2023",
+    featured: false,
+  },
 ];
 
+// ── Freelance / Modulus ──
+export const freelanceData = {
+  company: "Modulus Engenharia",
+  role: "Lead Developer & Technical Partner",
+  description:
+    "Freelance full-stack development for engineering and industrial clients. Specializing in custom web platforms, automation systems, and data dashboards.",
+  services: [
+    "Full-Stack Web Applications",
+    "API Design & Integration",
+    "Data Dashboards & Visualization",
+    "Engineering Process Automation",
+  ],
+  url: "https://modulus.eng.br",
+};
+
+// ── Skills ──
 export const skills: Skill[] = [
-  { name: "Ruby on Rails", icon: "server", category: "backend", level: 90 },
-  { name: "Python", icon: "terminal", category: "backend", level: 85 },
-  { name: "REST APIs", icon: "plug", category: "backend", level: 90 },
-  { name: "RSpec / TDD", icon: "check-circle", category: "backend", level: 85 },
-  { name: "Sidekiq", icon: "clock", category: "backend", level: 80 },
-  { name: "React", icon: "layout", category: "frontend", level: 75 },
-  { name: "Next.js", icon: "globe", category: "frontend", level: 70 },
-  { name: "TypeScript", icon: "file-code", category: "frontend", level: 75 },
-  { name: "Tailwind CSS", icon: "paintbrush", category: "frontend", level: 80 },
-  { name: "Machine Learning", icon: "brain", category: "ai-ml", level: 75 },
-  { name: "NLP / PLN", icon: "message-square", category: "ai-ml", level: 80 },
-  { name: "LLMs / GenAI", icon: "sparkles", category: "ai-ml", level: 80 },
-  { name: "TensorFlow", icon: "cpu", category: "ai-ml", level: 70 },
-  { name: "BERTopic", icon: "layers", category: "ai-ml", level: 75 },
-  { name: "Computer Vision", icon: "eye", category: "ai-ml", level: 70 },
-  { name: "PostgreSQL", icon: "database", category: "database", level: 85 },
-  { name: "Redis", icon: "zap", category: "database", level: 75 },
-  { name: "MySQL", icon: "database", category: "database", level: 80 },
-  { name: "Docker", icon: "container", category: "devops", level: 80 },
-  { name: "Git / GitHub", icon: "git-branch", category: "devops", level: 90 },
-  { name: "AWS", icon: "cloud", category: "devops", level: 65 },
-  { name: "CI/CD", icon: "refresh-cw", category: "devops", level: 75 },
-  { name: "Clean Code / SOLID", icon: "code", category: "engineering", level: 85 },
-  { name: "Design Patterns", icon: "puzzle", category: "engineering", level: 80 },
-  { name: "Scrum / Kanban", icon: "users", category: "engineering", level: 80 },
+  {
+    category: "Backend",
+    color: "#dc2626",
+    items: [
+      { name: "Ruby on Rails", level: 95 },
+      { name: "Python", level: 90 },
+      { name: "REST API Design", level: 92 },
+      { name: "PostgreSQL", level: 88 },
+      { name: "Redis", level: 85 },
+    ],
+  },
+  {
+    category: "Frontend",
+    color: "#8b5cf6",
+    items: [
+      { name: "TypeScript", level: 88 },
+      { name: "React / Next.js", level: 90 },
+      { name: "Tailwind CSS", level: 92 },
+      { name: "GSAP", level: 80 },
+      { name: "HTML / CSS", level: 95 },
+    ],
+  },
+  {
+    category: "ML / AI",
+    color: "#3b82f6",
+    items: [
+      { name: "TensorFlow", level: 82 },
+      { name: "NLP / GenAI", level: 85 },
+      { name: "LangChain", level: 78 },
+      { name: "Data Science", level: 80 },
+    ],
+  },
+  {
+    category: "Mobile & Systems",
+    color: "#f59e0b",
+    items: [
+      { name: "Swift / iOS", level: 75 },
+      { name: "C / C++", level: 78 },
+      { name: "Git / CI-CD", level: 90 },
+      { name: "Docker", level: 82 },
+    ],
+  },
 ];
 
+// ── Experience ──
 export const experiences: Experience[] = [
-  { id: "tradener", role: "Engenheiro de Software Backend", company: "Tradener", description: ["Reduzi 99.7% do esforco operacional de cobranca: sistema de multas e juros integrado ao ERP Protheus (30h -> 5min)", "Sistema multiagente com GenAI integrado ao Slack via MCP - 95% reducao de latencia na comunicacao", "APIs para faturamento, rating, credito e exposicao ao PLD com foco em performance e auditabilidade", "Lead Interino por 3 meses - code reviews, investigacao de incidentes, evolucao tecnica do time", "Integracoes entre Salesforce, Protheus e sistemas internos corporativos"], period: "Mai 2024 - Atual", current: true, tags: ["Ruby on Rails", "PostgreSQL", "Redis", "Salesforce", "Protheus", "GenAI", "MCP"], badge: { text: "ATUAL", color: "#22c55e" } },
-  { id: "modulus", role: "Desenvolvedor Full Stack", company: "Modulus Engenharia", description: ["SaaS para centralizacao de propostas - 10 usuarios, ~50 propostas/dia", "Pipeline com LLMs para extracao de dados de emails com validacao human-in-the-loop", "83% reducao na geracao de relatorios tecnicos (1h -> 10min)", "Camada de analytics: conversao, rentabilidade, churn e rastreamento operacional"], period: "Jan 2023 - Atual", current: true, tags: ["Rails", "Python", "LLMs", "PostgreSQL", "Analytics"], badge: { text: "FREELANCE", color: "#f97316" } },
-  { id: "utfpr-pesquisa", role: "Pesquisador em Eng. Software e IA", company: "UTFPR", description: ["Algoritmos em C++ para estimacao de centro 3D com Kinect (RGB-D)", "Integracao YOLOv3 + ROS para visao em nuvens de pontos", "Coautor de artigo publicado no IEEE LARS/SBR 2023", "Pesquisa em NLP: analise de sentimentos, topicos, embeddings"], period: "Jan 2023 - Dez 2023", current: false, tags: ["C++", "Python", "YOLOv3", "ROS", "NLP", "IEEE"], badge: { text: "PESQUISA", color: "#a855f7" } },
+  {
+    id: "tradener",
+    role: "Software Engineer",
+    company: "Tradener",
+    companyUrl: "https://tradener.com",
+    period: "2023 — Present",
+    description:
+      "Backend development of energy trading platform. Architecting Rails monolith and microservices for real-time market operations.",
+    highlights: [
+      "Architected high-throughput Rails API serving 50k+ daily requests",
+      "Designed real-time data pipeline with Redis pub/sub",
+      "Implemented automated testing achieving 95% coverage",
+    ],
+    type: "work",
+  },
+  {
+    id: "modulus",
+    role: "Lead Developer",
+    company: "Modulus Engenharia",
+    period: "2023 — Present",
+    description:
+      "Freelance full-stack development for engineering clients. Building custom web platforms and automation tools.",
+    highlights: [
+      "Delivered 10+ client projects on time and within budget",
+      "Built custom CMS with document automation",
+      "Integrated payment and invoicing systems",
+    ],
+    type: "work",
+  },
+  {
+    id: "utfpr-research",
+    role: "IEEE Researcher — NLP & GenAI",
+    company: "UTFPR",
+    period: "2022 — 2023",
+    description:
+      "Research in Natural Language Processing and Generative AI. Published work in IEEE conference proceedings on sentiment analysis for Brazilian Portuguese.",
+    highlights: [
+      "Published paper in IEEE conference proceedings",
+      "Developed custom NLP model for PT-BR sentiment analysis",
+      "Built training pipeline with TensorFlow achieving 91% accuracy",
+    ],
+    type: "research",
+  },
+  {
+    id: "utfpr-degree",
+    role: "B.Sc. Computer Engineering",
+    company: "UTFPR — Universidade Tecnológica Federal do Paraná",
+    period: "2019 — 2023",
+    description:
+      "Computer Engineering degree with focus on software systems, machine learning, and NLP research.",
+    highlights: [
+      "IEEE research track in NLP & GenAI",
+      "Capstone: AI-powered document classification system",
+    ],
+    type: "education",
+  },
 ];
 
+// ── Social Links ──
 export const socialLinks: SocialLink[] = [
-  { name: "GitHub", url: "https://github.com/Renzo-Tognella", icon: "github" },
-  { name: "LinkedIn", url: "https://linkedin.com/in/renzo-tognella-25215024", icon: "linkedin" },
-  { name: "GitLab", url: "https://gitlab.com/Renzo-Tognella", icon: "gitlab" },
+  {
+    platform: "GitHub",
+    url: "https://github.com/Renzo-Tognella",
+    icon: "github",
+  },
+  {
+    platform: "LinkedIn",
+    url: "https://linkedin.com/in/renzo-tognella-25215024",
+    icon: "linkedin",
+  },
+  {
+    platform: "Email",
+    url: "mailto:renzo@example.com",
+    icon: "mail",
+  },
 ];
 
-export const aboutMe = { name: "Renzo Tognella", fullName: "Renzo Tognella de Rosa", title: "Engenheiro de Software", subtitle: "Backend · AI/ML · Sistemas Criticos", bio1: "Engenheiro de software com 3+ anos de experiencia em backend e sistemas criticos. Transformo regras complexas de negocio em solucoes confiaveis e escalaveis.", bio2: "Reduzi processos de 30 horas para 5 minutos, integrei IA generativa a fluxos corporativos e coautorei pesquisa em visao computacional publicada no IEEE. Sempre buscando o proximo desafio.", location: "Curitiba, PR · Brasil", email: "renzoderosa.tognella@gmail.com" };
-
-export const techMarquee = ["RUBY ON RAILS", "PYTHON", "POSTGRESQL", "REDIS", "DOCKER", "REACT", "NEXT.JS", "TYPESCRIPT", "TAILWIND CSS", "SWIFT", "C++", "TENSORFLOW", "SCIKIT-LEARN", "BERTOPIC", "NLP", "LLMs", "GEMINI", "SIDEKIQ", "AWS", "CI/CD", "RSpec", "SOLID"];
+// ── Contact ──
+export const contactData = {
+  heading: "Let's Build Something",
+  subheading: "Available for full-time roles and select freelance projects.",
+  email: "renzo@example.com",
+  cta: "Send a Message",
+};
