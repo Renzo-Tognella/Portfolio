@@ -1,107 +1,165 @@
 "use client";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Award } from "lucide-react";
+
+import { useRef, useEffect } from "react";
 import { experiences } from "@/lib/data";
-gsap.registerPlugin(ScrollTrigger);
+import { Briefcase, FlaskConical, GraduationCap, ArrowUpRight } from "lucide-react";
+
+const typeIcons: Record<string, React.ReactNode> = {
+  work: <Briefcase size={14} />,
+  research: <FlaskConical size={14} />,
+  education: <GraduationCap size={14} />,
+};
 
 export default function Experience() {
   const sectionRef = useRef<HTMLElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!sectionRef.current) return;
-    const ctx = gsap.context(() => {
-      // Timeline line draws vertically on scroll
-      if (lineRef.current) {
-        gsap.fromTo(lineRef.current,
-          { scaleY: 0 },
-          { scaleY: 1, ease: "none",
-            scrollTrigger: { trigger: sectionRef.current, start: "top 60%", end: "bottom 30%", scrub: 0.5 }
+    const initGSAP = async () => {
+      const gsap = (await import("gsap")).default;
+      const ScrollTrigger = (await import("gsap/ScrollTrigger")).default;
+      gsap.registerPlugin(ScrollTrigger);
+
+      const section = sectionRef.current;
+      if (!section) return;
+
+      // Animate timeline line
+      gsap.fromTo(
+        ".timeline-line-fill",
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          duration: 1.5,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 60%",
+            end: "bottom 40%",
+            scrub: 1,
+          },
+        }
+      );
+
+      // Animate each item
+      gsap.utils.toArray<HTMLElement>(".experience-item").forEach((el, i) => {
+        gsap.fromTo(
+          el,
+          { x: i % 2 === 0 ? -40 : 40, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 85%",
+            },
           }
         );
-      }
-
-      // Dots pop in
-      gsap.fromTo(".tl-dot", { scale: 0 }, {
-        scale: 1, stagger: 0.3, duration: 0.4, ease: "back.out(2)",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 60%", toggleActions: "play none none none" },
       });
+    };
 
-      // Cards slide in from right with stagger
-      gsap.fromTo(".tl-card", { x: 80, opacity: 0 }, {
-        x: 0, opacity: 1, stagger: 0.25, duration: 0.8, ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 65%", toggleActions: "play none none none" },
-      });
-    }, sectionRef);
-    return () => ctx.revert();
+    initGSAP();
   }, []);
 
   return (
-    <section id="experiencia" ref={sectionRef} className="py-32 md:py-40 px-6 section-surface">
-      <div className="max-w-[1200px] mx-auto">
-        <span className="text-micro tracking-[0.2em] text-[#6e6e73] mb-4 block">Trajetoria</span>
-        <h2 className="text-headline text-[#f5f5f7] mb-20">Experiencia profissional</h2>
+    <section
+      ref={sectionRef}
+      id="experience"
+      className="section-elevated relative px-6 py-[120px] md:py-[160px]"
+    >
+      <div className="mx-auto max-w-4xl">
+        <div className="section-label">Experience</div>
 
-        <div className="relative">
-          {/* Vertical timeline line */}
-          <div ref={lineRef} className="absolute left-[23px] md:left-[calc(33.333%-1px)] top-0 bottom-0 w-[1px] bg-gradient-to-b from-[#f5f5f7]/10 via-[#f5f5f7]/06 to-transparent origin-top" />
+        <h2 className="text-3xl font-light tracking-tight text-white md:text-5xl">
+          Where I've<br />
+          <span className="text-[#666]">Worked</span>
+        </h2>
 
-          {experiences.map((exp) => (
-            <div key={exp.id} className="relative mb-16 last:mb-0">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                {/* Date column */}
-                <div className="relative pl-12 md:pl-0 md:text-right md:pr-12">
-                  {/* Dot */}
-                  <div className="tl-dot absolute left-[18px] md:left-[calc(33.333%-5px)] top-1.5 w-[10px] h-[10px] rounded-full bg-[#0a0a0a] border-2 border-[#f5f5f7]/20 z-10" />
-                  <span className="font-mono text-sm text-[#6e6e73] tracking-tight">{exp.period}</span>
+        {/* Timeline */}
+        <div className="relative mt-16">
+          {/* Vertical line */}
+          <div className="absolute left-[11px] top-0 h-full w-[1px] bg-[#1a1a1a] md:left-1/2 md:-translate-x-1/2">
+            <div className="timeline-line-fill h-full w-full origin-top bg-[#dc2626]" />
+          </div>
+
+          <div className="space-y-12">
+            {experiences.map((exp, i) => (
+              <div
+                key={exp.id}
+                className={`experience-item relative pl-10 md:w-1/2 ${
+                  i % 2 === 0
+                    ? "md:pr-12 md:text-right"
+                    : "md:ml-auto md:pl-12"
+                }`}
+              >
+                {/* Dot */}
+                <div
+                  className={`absolute top-1 flex h-6 w-6 items-center justify-center rounded-full border border-[#222] bg-[#0a0a0a] ${
+                    i % 2 === 0
+                      ? "left-0 md:left-auto md:-right-3"
+                      : "left-0 md:-left-3"
+                  }`}
+                >
+                  <div className="text-[#dc2626]">
+                    {typeIcons[exp.type]}
+                  </div>
                 </div>
 
                 {/* Content */}
-                <div className="md:col-span-2 tl-card">
-                  {/* Badge */}
-                  <span className="inline-flex rounded-full px-3 py-1 text-micro tracking-wider"
-                    style={{ backgroundColor: exp.badge.color + "12", color: exp.badge.color, border: `1px solid ${exp.badge.color}20` }}>
-                    {exp.badge.text}
-                  </span>
-
-                  <h3 className="text-title text-[#f5f5f7] mt-3">{exp.role}</h3>
-                  <p className="text-body-lg mt-1">{exp.company}</p>
-
-                  {/* Description items */}
-                  <div className="mt-5 space-y-3">
-                    {exp.description.map((item, j) => (
-                      <p key={j} className="text-sm text-[#86868b] leading-relaxed pl-4 border-l border-white/[0.04]">{item}</p>
-                    ))}
+                <div className="shadow-border p-6 transition-all duration-300 hover:bg-[#1a1a1a]">
+                  <div
+                    className={`flex items-center gap-2 ${
+                      i % 2 === 0 ? "md:justify-end" : ""
+                    }`}
+                  >
+                    <span className="font-mono text-xs tracking-wider uppercase text-[#444]">
+                      {exp.period}
+                    </span>
                   </div>
 
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mt-5">
-                    {exp.tags.map((tag) => (
-                      <span key={tag} className="text-micro px-2.5 py-1 rounded-full bg-white/[0.03] text-[#6e6e73] border border-white/[0.04]">{tag}</span>
-                    ))}
-                  </div>
+                  <h3 className="mt-2 text-lg font-light text-white">
+                    {exp.role}
+                  </h3>
 
-                  {/* IEEE card */}
-                  {exp.id === "utfpr-pesquisa" && (
-                    <div className="mt-6 card p-5" style={{ animation: "float 6s ease-in-out infinite" }}>
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-[#a855f7]/10 flex items-center justify-center shrink-0">
-                          <Award className="w-5 h-5 text-[#a855f7]" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-[#f5f5f7]">Artigo publicado no IEEE LARS/SBR 2023</p>
-                          <p className="text-caption text-[#6e6e73] mt-1">Estimating the 3D center point of an object with Kinect sensor RGB-D images</p>
-                        </div>
-                      </div>
-                    </div>
+                  {exp.companyUrl ? (
+                    <a
+                      href={exp.companyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center gap-1 font-mono text-sm text-[#dc2626] transition-opacity hover:opacity-70"
+                    >
+                      {exp.company}
+                      <ArrowUpRight size={12} />
+                    </a>
+                  ) : (
+                    <p className="mt-1 font-mono text-sm text-[#dc2626]">
+                      {exp.company}
+                    </p>
                   )}
+
+                  <p className="mt-3 text-sm leading-relaxed text-[#666]">
+                    {exp.description}
+                  </p>
+
+                  <ul
+                    className={`mt-4 space-y-1.5 ${i % 2 === 0 ? "md:text-left" : ""}`}
+                  >
+                    {exp.highlights.map((h, hi) => (
+                      <li
+                        key={hi}
+                        className="text-xs text-[#555]"
+                      >
+                        → {h}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+
+        <div className="reveal-line mt-20" />
       </div>
     </section>
   );
