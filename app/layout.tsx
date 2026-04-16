@@ -1,40 +1,53 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "@/components/ui/smooth-scroll";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist-sans",
+  display: "swap",
+});
 
-export const viewport: Viewport = {
-  themeColor: "#000000",
-  width: "device-width",
-  initialScale: 1,
-};
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Renzo Tognella — Engenheiro de Software",
-  description: "Backend engineer specializing in Ruby on Rails, Python and AI/ML. Coauthor IEEE. Building critical systems at Tradener.",
+  title: "Renzo Tognella — Software Engineer",
+  description:
+    "Portfolio of Renzo Tognella de Rosa — Software Engineer, Backend Architect, and ML Researcher based in Curitiba, Brazil.",
+  keywords: [
+    "software engineer",
+    "backend developer",
+    "Ruby on Rails",
+    "Next.js",
+    "machine learning",
+    "NLP",
+    "portfolio",
+  ],
   authors: [{ name: "Renzo Tognella de Rosa" }],
   openGraph: {
-    title: "Renzo Tognella — Engenheiro de Software",
-    description: "Backend · AI/ML · Sistemas Criticos",
-    siteName: "Renzo Tognella",
-    locale: "pt_BR",
+    title: "Renzo Tognella — Software Engineer",
+    description:
+      "Building systems that think, scale, and endure.",
     type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Renzo Tognella — Engenheiro de Software",
-    description: "Backend · AI/ML · Sistemas Criticos",
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="font-sans bg-background text-foreground">
-        <div className="grain-overlay" />
-        {children}
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="antialiased">
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
