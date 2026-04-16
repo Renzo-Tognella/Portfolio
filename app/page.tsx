@@ -5,7 +5,6 @@ import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/navbar";
 import LoadingScreen from "@/components/ui/loading-screen";
 
-// Dynamic imports for code splitting
 const Hero = dynamic(() => import("@/components/sections/hero"));
 const About = dynamic(() => import("@/components/sections/about"));
 const Projects = dynamic(() => import("@/components/sections/projects"));
@@ -19,8 +18,8 @@ export default function Home() {
 
   return (
     <>
-      {/* Grain overlay */}
-      <div className="grain-overlay" />
+      {/* Grain overlay — only visible on md+ for performance */}
+      <div className="grain-overlay hidden md:block" />
 
       {isLoading && (
         <LoadingScreen onComplete={() => setIsLoading(false)} />
