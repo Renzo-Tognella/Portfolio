@@ -9,20 +9,16 @@ interface LoadingScreenProps {
 export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [count, setCount] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
-  const counterRef = useRef<HTMLSpanElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const duration = 3400; // 3.4s counting
-    const interval = 20; // update every 20ms
+    const duration = 3400;
+    const interval = 20;
     const steps = duration / interval;
     let current = 0;
 
     const timer = setInterval(() => {
       current++;
       const progress = current / steps;
-
-      // Eased progress — starts slow, accelerates, then eases at end
       const eased = progress < 0.5
         ? 4 * progress * progress * progress
         : 1 - Math.pow(-2 * progress + 2, 3) / 2;
@@ -32,10 +28,9 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
       if (value >= 100) {
         clearInterval(timer);
-        // Hold at 100 for 100ms then exit
         setTimeout(() => {
           setIsExiting(true);
-          setTimeout(onComplete, 800); // Exit animation duration
+          setTimeout(onComplete, 800);
         }, 100);
       }
     }, interval);
@@ -45,34 +40,29 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
   return (
     <div
-      ref={containerRef}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black"
       style={{
-        backgroundColor: "#000",
         transition: "clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1)",
         clipPath: isExiting
-          ? "inset(50% 50% 50% 50%)" // Shrinks to center point
+          ? "inset(50% 50% 50% 50%)"
           : "inset(0 0 0 0)",
       }}
     >
-      {/* Counter */}
+      {/* Counter — responsive sizing */}
       <div className="relative">
         <span
-          ref={counterRef}
-          className="font-mono text-[120px] font-light tracking-tight text-white tabular-nums"
-          style={{
-            fontVariantNumeric: "tabular-nums",
-          }}
+          className="font-mono text-[60px] font-light tracking-tight text-white tabular-nums sm:text-[80px] md:text-[120px]"
+          style={{ fontVariantNumeric: "tabular-nums" }}
         >
           {count}
         </span>
-        <span className="absolute -right-8 top-8 font-mono text-2xl text-[#dc2626]">
+        <span className="absolute -right-5 top-3 font-mono text-lg text-[#dc2626] sm:-right-7 sm:top-5 sm:text-xl md:-right-8 md:top-8 md:text-2xl">
           %
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="mt-8 h-[1px] w-[200px] bg-[#222]">
+      <div className="mt-6 h-px w-[140px] bg-[#222] sm:mt-8 sm:w-[200px]">
         <div
           className="h-full bg-[#dc2626] transition-all duration-75"
           style={{ width: count + "%" }}
@@ -81,7 +71,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
       {/* Subtitle */}
       <p
-        className="mt-6 font-mono text-xs tracking-[0.3em] uppercase text-[#444]"
+        className="mt-4 font-mono text-[10px] tracking-[0.25em] uppercase text-[#444] sm:mt-5 sm:text-xs"
         style={{
           opacity: count > 20 ? 1 : 0,
           transition: "opacity 0.6s ease",
