@@ -9,7 +9,6 @@ export default function Hero() {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Typewriter effect for roles
   useEffect(() => {
     const currentRole = heroData.roles[roleIndex];
     let timeout: NodeJS.Timeout;
@@ -36,7 +35,6 @@ export default function Hero() {
     return () => clearTimeout(timeout);
   }, [displayText, isDeleting, roleIndex]);
 
-  // GSAP entrance animation
   useEffect(() => {
     const initGSAP = async () => {
       const gsap = (await import("gsap")).default;
@@ -44,7 +42,6 @@ export default function Hero() {
       if (!section) return;
 
       const tl = gsap.timeline({ delay: 3.8 });
-
       tl.fromTo(
         section.querySelector(".hero-greeting"),
         { y: 40, opacity: 0 },
@@ -75,7 +72,7 @@ export default function Hero() {
           "-=0.3"
         )
         .fromTo(
-          section.querySelector(".hero-scroll-indicator"),
+          section.querySelector(".hero-scroll"),
           { opacity: 0 },
           { opacity: 1, duration: 1, ease: "power2.out" },
           "-=0.2"
@@ -89,9 +86,9 @@ export default function Hero() {
     <section
       ref={sectionRef}
       id="hero"
-      className="section-void relative flex min-h-screen items-center justify-center overflow-hidden px-6"
+      className="section-void relative flex min-h-[100svh] items-center justify-center overflow-hidden"
     >
-      {/* Background radial gradient */}
+      {/* Background glow */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -100,8 +97,8 @@ export default function Hero() {
         }}
       />
 
-      {/* Grid lines (decorative) */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.02]">
+      {/* Decorative grid */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.015]">
         <div
           className="h-full w-full"
           style={{
@@ -112,14 +109,16 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-5xl text-center">
+      <div className="container-section relative z-10 py-24 text-center sm:py-32">
         {/* Greeting */}
-        <p className="hero-greeting font-mono text-sm tracking-[0.3em] uppercase text-[#666] md:text-base">
+        <p className="hero-greeting font-mono text-[11px] tracking-[0.25em] uppercase text-[#666] sm:text-xs">
           {heroData.greeting}
         </p>
 
-        {/* Name */}
-        <h1 className="hero-name mt-6 text-5xl font-light tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-9xl">
+        {/* Name — Apple-style display type */}
+        <h1
+          className="hero-name mt-4 text-[clamp(2.5rem,8vw,7rem)] font-light leading-[1.05] tracking-[-0.02em] text-white sm:mt-6"
+        >
           {heroData.name.split(" ")[0]}
           <br />
           <span className="text-gradient-cinematic">
@@ -128,28 +127,28 @@ export default function Hero() {
         </h1>
 
         {/* Typewriter role */}
-        <div className="hero-role mt-8 flex items-center justify-center gap-3">
-          <span className="inline-block h-[1px] w-8 bg-[#dc2626]" />
-          <span className="font-mono text-lg tracking-wide text-[#a3a3a3] md:text-xl">
+        <div className="hero-role mt-6 flex items-center justify-center gap-3 sm:mt-8">
+          <span className="hidden h-px w-6 bg-[#dc2626] sm:block" />
+          <span className="font-mono text-sm tracking-wide text-[#a3a3a3] sm:text-base">
             {displayText}
             <span className="animate-pulse text-[#dc2626]">|</span>
           </span>
-          <span className="inline-block h-[1px] w-8 bg-[#dc2626]" />
+          <span className="hidden h-px w-6 bg-[#dc2626] sm:block" />
         </div>
 
         {/* Tagline */}
-        <p className="hero-tagline mt-6 text-base text-[#666] md:text-lg">
+        <p className="hero-tagline mt-4 text-sm leading-relaxed text-[#666] sm:mt-5 sm:text-base">
           {heroData.tagline}
         </p>
 
         {/* CTAs */}
-        <div className="hero-cta mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+        <div className="hero-cta mt-8 flex flex-col items-center gap-4 sm:mt-10 sm:flex-row sm:justify-center">
           <a href={heroData.cta.primary.href} className="magnetic-btn">
             {heroData.cta.primary.label}
           </a>
           <a
             href={heroData.cta.secondary.href}
-            className="font-mono text-sm tracking-widest uppercase text-[#666] transition-colors hover:text-white"
+            className="flex min-h-[44px] items-center font-mono text-xs tracking-[0.1em] uppercase text-[#666] transition-colors hover:text-white sm:text-sm"
           >
             {heroData.cta.secondary.label} &rarr;
           </a>
@@ -157,17 +156,15 @@ export default function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="hero-scroll-indicator absolute bottom-12 left-1/2 -translate-x-1/2">
-        <div className="flex flex-col items-center gap-3">
-          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#444]">
+      <div className="hero-scroll absolute bottom-8 left-1/2 -translate-x-1/2 sm:bottom-10">
+        <div className="flex flex-col items-center gap-2">
+          <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-[#444]">
             Scroll
           </span>
-          <div className="h-12 w-[1px] overflow-hidden bg-[#222]">
+          <div className="h-10 w-px overflow-hidden bg-[#222]">
             <div
               className="h-full w-full bg-[#dc2626]"
-              style={{
-                animation: "scrollDown 2s ease-in-out infinite",
-              }}
+              style={{ animation: "scrollDown 2s ease-in-out infinite" }}
             />
           </div>
         </div>
