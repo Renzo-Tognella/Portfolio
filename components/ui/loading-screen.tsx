@@ -1,67 +1,94 @@
 "use client";
-import { useEffect, useRef, useState, useCallback } from "react";
-import gsap from "gsap";
 
-interface LoadingScreenProps { onComplete: () => void; }
+import { useEffect, useRef, useState } from "react";
+
+interface LoadingScreenProps {
+  onComplete: () => void;
+}
 
 export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [count, setCount] = useState(0);
-  const [phase, setPhase] = useState<"counting" | "revealing" | "done">("counting");
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLDivElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-  const stableOnComplete = useCallback(onComplete, [onComplete]);
+  const [isExiting, setIsExiting] = useState(false);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const counter = { val: 0 };
-    const tl = gsap.timeline();
+    const duration = 3400; // 3.4s counting
+    const interval = 20; // update every 20ms
+    const steps = duration / interval;
+    let current = 0;
 
-    // Phase 1: Counter 0-100 with easing
-    tl.to(counter, {
-      val: 100, duration: 2.8, ease: "power3.inOut",
-      onUpdate: () => setCount(Math.round(counter.val)),
-    });
+    const timer = setInterval(() => {
+      current++;
+      const progress = current / steps;
 
-    // Phase 2: Shrink counter + expand reveal line
-    tl.to(counterRef.current, {
-      scale: 0.6, opacity: 0, duration: 0.4, ease: "power2.in",
-      onComplete: () => setPhase("revealing"),
-    }, "-=0.1");
+      // Eased progress — starts slow, accelerates, then eases at end
+      const eased = progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
-    // Phase 3: Reveal line expands
-    tl.to(lineRef.current, {
-      scaleX: 1, duration: 0.6, ease: "power4.inOut",
-    }, "-=0.2");
+      const value = Math.min(Math.round(eased * 100), 100);
+      setCount(value);
 
-    // Phase 4: Overlay slides up like Apple product reveal
-    tl.to(overlayRef.current, {
-      yPercent: -100, duration: 1.0, ease: "power4.inOut",
-      onComplete: () => { setPhase("done"); stableOnComplete(); },
-    }, "-=0.2");
+      if (value >= 100) {
+        clearInterval(timer);
+        // Hold at 100 for 100ms then exit
+        setTimeout(() => {
+          setIsExiting(true);
+          setTimeout(onComplete, 800); // Exit animation duration
+        }, 100);
+      }
+    }, interval);
 
-    return () => { tl.kill(); };
-  }, [stableOnComplete]);
-
-  if (phase === "done") return null;
+    return () => clearInterval(timer);
+  }, [onComplete]);
 
   return (
-    <div ref={overlayRef} className="fixed inset-0 z-[9999] bg-black flex items-center justify-center flex-col">
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
+      style={{
+        backgroundColor: "#000",
+        transition: "clip-path 0.8s cubic-bezier(0.76, 0, 0.24, 1)",
+        clipPath: isExiting
+          ? "inset(50% 50% 50% 50%)" // Shrinks to center point
+          : "inset(0 0 0 0)",
+      }}
+    >
       {/* Counter */}
-      <div ref={counterRef} className="relative">
-        <span className="font-mono text-[clamp(4rem,10vw,7rem)] font-light text-[#f5f5f7]/20 tabular-nums tracking-tight">
+      <div className="relative">
+        <span
+          ref={counterRef}
+          className="font-mono text-[120px] font-light tracking-tight text-white tabular-nums"
+          style={{
+            fontVariantNumeric: "tabular-nums",
+          }}
+        >
           {count}
         </span>
-        {/* Subtle ruby accent line below counter */}
-        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-[1px] bg-[#dc2626]/40" />
+        <span className="absolute -right-8 top-8 font-mono text-2xl text-[#dc2626]">
+          %
+        </span>
       </div>
 
       {/* Progress bar */}
-      <div className="absolute bottom-0 left-0 w-full h-[1px]">
-        <div className="h-full bg-gradient-to-r from-transparent via-[#f5f5f7]/20 to-transparent" style={{ width: `${count}%` }} />
+      <div className="mt-8 h-[1px] w-[200px] bg-[#222]">
+        <div
+          className="h-full bg-[#dc2626] transition-all duration-75"
+          style={{ width: count + "%" }}
+        />
       </div>
 
-      {/* Center reveal line */}
-      <div ref={lineRef} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[60vh] w-[1px] bg-gradient-to-b from-transparent via-[#f5f5f7]/10 to-transparent origin-center scale-x-0" />
+      {/* Subtitle */}
+      <p
+        className="mt-6 font-mono text-xs tracking-[0.3em] uppercase text-[#444]"
+        style={{
+          opacity: count > 20 ? 1 : 0,
+          transition: "opacity 0.6s ease",
+        }}
+      >
+        Loading experience
+      </p>
     </div>
   );
 }
