@@ -52,7 +52,7 @@ export const navLinks = [
 // ── Hero Data ──
 export const heroData = {
   greeting: "Hello, I'm",
-  name: "Renzo Tognella",
+  name: "Renzo Tognella de Rosa",
   roles: [
     "Software Engineer",
     "Backend Architect",
