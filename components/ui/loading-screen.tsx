@@ -11,8 +11,8 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    const duration = 3400;
-    const interval = 20;
+    const duration = 2200;
+    const interval = 50;
     const steps = duration / interval;
     let current = 0;
 
@@ -30,7 +30,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
         clearInterval(timer);
         setTimeout(() => {
           setIsExiting(true);
-          setTimeout(onComplete, 800);
+          setTimeout(onComplete, 500);
         }, 100);
       }
     }, interval);

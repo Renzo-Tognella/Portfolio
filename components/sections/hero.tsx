@@ -41,7 +41,7 @@ export default function Hero() {
       const section = sectionRef.current;
       if (!section) return;
 
-      const tl = gsap.timeline({ delay: 3.8 });
+      const tl = gsap.timeline({ delay: 2.4 });
       tl.fromTo(
         section.querySelector(".hero-greeting"),
         { y: 40, opacity: 0 },

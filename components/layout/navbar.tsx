@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
-    const showTimer = setTimeout(() => setIsVisible(true), 3600);
+    const showTimer = setTimeout(() => setIsVisible(true), 2400);
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 100);
