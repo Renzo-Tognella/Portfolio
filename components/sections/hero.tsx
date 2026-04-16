@@ -82,6 +82,11 @@ export default function Hero() {
     initGSAP();
   }, []);
 
+  // Split name: first name on line 1, rest on line 2
+  const nameParts = heroData.name.split(" ");
+  const firstName = nameParts[0];
+  const lastName = nameParts.slice(1).join(" ");
+
   return (
     <section
       ref={sectionRef}
@@ -115,14 +120,12 @@ export default function Hero() {
           {heroData.greeting}
         </p>
 
-        {/* Name — Apple-style display type */}
-        <h1
-          className="hero-name mt-4 text-[clamp(2.5rem,8vw,7rem)] font-light leading-[1.05] tracking-[-0.02em] text-white sm:mt-6"
-        >
-          {heroData.name.split(" ")[0]}
+        {/* Name */}
+        <h1 className="hero-name mt-4 text-[clamp(2.5rem,8vw,7rem)] font-light leading-[1.05] tracking-[-0.02em] text-white sm:mt-6">
+          {firstName}
           <br />
           <span className="text-gradient-cinematic">
-            {heroData.name.split(" ").slice(1).join(" ")}
+            {lastName}
           </span>
         </h1>
 
